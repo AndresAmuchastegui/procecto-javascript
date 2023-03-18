@@ -1,44 +1,61 @@
-// Pedir al usuario el precio base, porcentaje de impuestos y porcentaje de descuento
-let precioBase = "n";
-precioBase = +prompt("Ingrese el precio base del producto (solo se permiten números): ");
-while (isNaN(precioBase) || precioBase < 0) {
-    alert("El precio del producto debe ser numerico y no debe ser inferior a 0")
-    precioBase = +prompt("Ingrese el precio base del producto (solo se permiten números): ");
+// Entradas
+let distancia = parseFloat(prompt("Ingrese la distancia de envio en kilómetros:"));
+while (isNaN(distancia) || distancia < 0) {
+    alert("La distancia de envio debe ser un dato numerico y no debe ser inferior a 0")
+    distancia = +prompt("Ingrese la distancia en kilómetros:");
 }
 
-let impuestos = "n";
-impuestos = +prompt("Ingrese el porcentaje de impuestos (por ejemplo, 10 para un impuesto del 10%) (solo se permiten números): ");
-while (isNaN(impuestos) || impuestos < 0) {
-    alert("El porcentaje de impuestos debe ser numerico y no debe ser inferior a 0%")
-    impuestos = +prompt("Ingrese el porcentaje de impuestos (por ejemplo, 10 para un impuesto del 10%) (solo se permiten números): ");
+let peso = parseFloat(prompt("Ingrese el peso del paquete en kilogramos:"));
+while (isNaN(peso) || peso < 0) {
+    alert("El peso del producto debe ser un dato numerico y no debe ser inferior a 0")
+    peso = +prompt("Ingrese el peso en kilogramos:");
 }
 
-let descuento = "n";
-descuento = +prompt("Ingrese el porcentaje de descuento (por ejemplo, 5 para un descuento del 5%): ");
-while (isNaN(descuento) || descuento < 0 || descuento > 100) {
-    alert("El porcentaje de descuento debe ser numerico, no puede superar el 100% ni ser inferior a 0%.")
-    descuento = +prompt("Ingrese el porcentaje de descuento (por ejemplo, 5 para un descuento del 5%): ");
+// Declara variables y objetos
+let costoKm = 2; // Costo por kilómetro
+let costoPeso = 5; // Costo por kilogramo
+let costoFijo = 10; // Costo fijo de entrega
+let descuento = 0; // Descuento a aplicar al costo total
+let total = 0; // Costo total de entrega
+let paquetes = [
+    {nombre: "Paquete 1", peso: 2, distancia: 10},
+    {nombre: "Paquete 2", peso: 4, distancia: 20},
+    {nombre: "Paquete 3", peso: 1, distancia: 5},
+    {nombre: "Paquete 4", peso: 3, distancia: 15},
+    {nombre: "Paquete 5", peso: 5, distancia: 25},
+]; 
+
+// Función para calcular el costo de entrega
+function calcularCosto(distancia, peso) {
+    let costoDistancia = distancia * costoKm;
+    let costoPesoTotal = peso * costoPeso;
+    let costoTotal = costoDistancia + costoPesoTotal + costoFijo;
+    return costoTotal;
 }
 
+// Llamar a la función
+total = calcularCosto(distancia, peso);
 
-// Función para calcular el precio final del producto
-function calcularPrecioFinal(precioBase, impuestos, descuento) {
-    let descuentoAplicados = precioBase * (descuento / 100);
-    let precioConDescuento = precioBase - descuentoAplicados;
-    let impuestosAplicados = precioConDescuento * (impuestos / 100);
-    let precioFinal = precioConDescuento + impuestosAplicados;
-    return [precioFinal, impuestosAplicados, descuentoAplicados];
-
+// Aplicar descuento del 10% si el costo total es mayor a 50
+if (total > 50) {
+    descuento = total * 0.1;
+    total -= descuento;
 }
 
-let precios = calcularPrecioFinal(precioBase, impuestos, descuento);
-let precioFinal = precios[0];
-let impuestosAplicados = precios[1];
-let descuentoAplicado = precios[2];
+// Mostrar el resultado al usuario
+console.log("El costo de entrega es $" + total.toFixed(2) + ".");
+console.log("Se aplicó un descuento de $" + descuento.toFixed(2) + ".");
 
-// Llamar a la función y mostrar el precio final al usuario
-alert("El precio final del producto es: $" + precioFinal.toFixed(2) + "\n" +
-    "-----------------------------------------" + "\n" +
-    "Precio base del producto: $" + precioBase.toFixed(2) + "\n" +
-    "Impuestos aplicados: $" + impuestosAplicados.toFixed(2) + " (" + impuestos.toFixed(2) + "%)\n" +
-    "Descuento aplicado: $" + descuentoAplicado.toFixed(2) + " (" + descuento.toFixed(2) + "%)");
+let paquetesLivianos = paquetes.filter(function(paquete) {
+    return paquete.peso < 3;
+});
+
+console.log("Los paquetes livianos son:");
+console.log(paquetesLivianos);
+
+let paqueteBuscado = paquetes.find(function(paquete) {
+    return paquete.distancia === 20;
+});
+
+console.log("El paquete buscado es:");
+console.log(paqueteBuscado);
