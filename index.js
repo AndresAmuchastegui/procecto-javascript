@@ -1,7 +1,7 @@
 // Entradas
-let distancia = parseFloat(prompt("Ingrese la distancia de envio en kilómetros:"));
+let distancia = parseFloat(prompt("Ingrese la distancia de envío en kilómetros:"));
 while (isNaN(distancia) || distancia < 0) {
-    alert("La distancia de envio debe ser un dato numerico y no debe ser inferior a 0")
+    alert("La distancia de envío debe ser un dato numerico y no debe ser inferior a 0")
     distancia = +prompt("Ingrese la distancia en kilómetros:");
 }
 
