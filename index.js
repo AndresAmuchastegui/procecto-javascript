@@ -1,61 +1,35 @@
-// Entradas
-let distancia = parseFloat(prompt("Ingrese la distancia de envío en kilómetros:"));
-while (isNaN(distancia) || distancia < 0) {
-    alert("La distancia de envío debe ser un dato numerico y no debe ser inferior a 0")
-    distancia = +prompt("Ingrese la distancia en kilómetros:");
-}
+// Manejador de eventos para el botón "Calcular costo"
+document.getElementById("calcular-btn").addEventListener("click", function (event) {
+    event.preventDefault(); // evitar que el formulario se envíe
 
-let peso = parseFloat(prompt("Ingrese el peso del paquete en kilogramos:"));
-while (isNaN(peso) || peso < 0) {
-    alert("El peso del producto debe ser un dato numerico y no debe ser inferior a 0")
-    peso = +prompt("Ingrese el peso en kilogramos:");
-}
+    // Leer los valores de los campos de entrada
+    let peso = parseFloat(document.getElementById("peso").value);
+    let distancia = parseFloat(document.getElementById("distancia").value);
 
-// Declara variables y objetos
-let costoKm = 2; // Costo por kilómetro
-let costoPeso = 5; // Costo por kilogramo
-let costoFijo = 10; // Costo fijo de entrega
-let descuento = 0; // Descuento a aplicar al costo total
-let total = 0; // Costo total de entrega
-let paquetes = [
-    {nombre: "Paquete 1", peso: 2, distancia: 10},
-    {nombre: "Paquete 2", peso: 4, distancia: 20},
-    {nombre: "Paquete 3", peso: 1, distancia: 5},
-    {nombre: "Paquete 4", peso: 3, distancia: 15},
-    {nombre: "Paquete 5", peso: 5, distancia: 25},
-]; 
+    // Calcular el costo de envío
+    let costo = calcularCostoEnvio(peso, distancia);
 
-// Función para calcular el costo de entrega
-function calcularCosto(distancia, peso) {
-    let costoDistancia = distancia * costoKm;
-    let costoPesoTotal = peso * costoPeso;
-    let costoTotal = costoDistancia + costoPesoTotal + costoFijo;
-    return costoTotal;
-}
-
-// Llamar a la función
-total = calcularCosto(distancia, peso);
-
-// Aplicar descuento del 10% si el costo total es mayor a 50
-if (total > 50) {
-    descuento = total * 0.1;
-    total -= descuento;
-}
-
-// Mostrar el resultado al usuario
-console.log("El costo de entrega es $" + total.toFixed(2) + ".");
-console.log("Se aplicó un descuento de $" + descuento.toFixed(2) + ".");
-
-let paquetesLivianos = paquetes.filter(function(paquete) {
-    return paquete.peso < 3;
+    // Mostrar el resultado en la página
+    let resultado = document.createElement("p");
+    resultado.textContent = "El costo de envío es de $" + costo.toFixed(2);
+    document.body.appendChild(resultado);
 });
 
-console.log("Los paquetes livianos son:");
-console.log(paquetesLivianos);
+// Función para calcular el costo de envío
+function calcularCostoEnvio(peso, distancia) {
+    // Leer los valores de costo de envío desde un archivo JSON
+    let costoBase = 10;
+    let costoPorKg = 1.5;
+    let costoPorKm = 0.5;
 
-let paqueteBuscado = paquetes.find(function(paquete) {
-    return paquete.distancia === 20;
-});
+    // Calcular el costo total de envío
+    let costo = costoBase + (peso * costoPorKg) + (distancia * costoPorKm);
 
-console.log("El paquete buscado es:");
-console.log(paqueteBuscado);
+    // Almacenar los datos en el Storage
+    localStorage.setItem("peso", peso);
+    localStorage.setItem("distancia", distancia);
+    localStorage.setItem("costo", costo);
+
+    // Devolver el costo total
+    return costo;
+}
